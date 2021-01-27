@@ -1,6 +1,7 @@
 package com.mortgagelender.exception;
 
-public class NotQualifiedApplicantException extends Throwable {
-    public NotQualifiedApplicantException(String s) {
+public class NotQualifiedApplicantException extends RuntimeException {
+    public NotQualifiedApplicantException(String message) {
+        super(message);
     }
 }
