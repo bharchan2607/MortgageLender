@@ -14,7 +14,8 @@ public class MortgageLender {
     private final int ALLOWED_DTI = 36;
     private final int ALLOWED_CREDIT_SCORE = 620;
     private final double ALLOWED_SAVINGS = 0.25;
-   private List<Loan> loans;
+    private final int EXPIRATION_DURATION = 3;
+    private List<Loan> loans;
 
     public MortgageLender(double amount) {
         this.currentAmount = amount;
@@ -48,13 +49,13 @@ public class MortgageLender {
         checkApplicationQualification(loanNumber);
         if(loan.getApplicant().getQualification().equals("qualified")){
             loan.setLoanAmount(loan.getApplicant().getRequestedAmount());
-            loan.setApprovedLoanStatus("qualified");
+            loan.setApprovedLoanStatus(Status.qualified.toString());
         }else if(loan.getApplicant().getQualification().equals("partially qualified")){
             loan.setLoanAmount(loan.getApplicant().getSavings() * 4 );
-            loan.setApprovedLoanStatus("qualified");
+            loan.setApprovedLoanStatus(Status.qualified.toString());
         }else{
             loan.setLoanAmount(0);
-            loan.setApprovedLoanStatus("denied");
+            loan.setApprovedLoanStatus(Status.denied.toString());
         }
 
     }
@@ -67,10 +68,10 @@ public class MortgageLender {
             if (loan.getLoanAmount() <= currentAmount) {
                 pendingFund += loan.getLoanAmount() ;
                 currentAmount -= loan.getLoanAmount() ;
-                loan.setApprovedLoanStatus("approved");
+                loan.setApprovedLoanStatus(Status.approved.toString());
                 loan.setApprovedDate(LocalDate.now());
             } else {
-                loan.setApprovedLoanStatus("on hold");
+                loan.setApprovedLoanStatus(Status.on_hold.toString());
             }
         }else{
             throw new NotQualifiedApplicantException("You can't proceed with the loan application");
@@ -86,7 +87,7 @@ public class MortgageLender {
     }
 
     public void setLoan(Loan loan) {
-        loans.add(loan);
+        loans.add(new Loan(loan));
     }
 
     public List<Loan> getLoans() {
@@ -97,15 +98,13 @@ public class MortgageLender {
         Loan loan=getLoan(loanNumber);
 
         if(accepted){
-            pendingFund-=loan.getLoanAmount();
-            loan.setApprovedLoanStatus("accepted");
-
+            pendingFund -= loan.getLoanAmount();
+            loan.setApprovedLoanStatus(Status.accepted.toString());
         }
         else{
-            currentAmount+=loan.getLoanAmount();
-            pendingFund-=loan.getLoanAmount();
-            loan.setApprovedLoanStatus("rejected");
-
+            currentAmount += loan.getLoanAmount();
+            pendingFund -= loan.getLoanAmount();
+            loan.setApprovedLoanStatus(Status.rejected.toString());
         }
 
     }
@@ -115,10 +114,10 @@ public class MortgageLender {
             LocalDate now= LocalDate.now();
             if(loan.getApprovedLoanStatus().equals("approved")) {
                 Period diff = Period.between(loan.getApprovedDate(), now);
-                if (diff.getDays() > 3) {
+                if (diff.getDays() > EXPIRATION_DURATION) {
                     currentAmount += loan.getLoanAmount();
                     pendingFund -= loan.getLoanAmount();
-                    loan.setApprovedLoanStatus("expired");
+                    loan.setApprovedLoanStatus(Status.expired.toString());
                 }
             }
         }
@@ -140,7 +139,5 @@ public class MortgageLender {
                 .filter(loan -> loan.getApprovedLoanStatus().equals(status))
                 .map(loan -> loan.toString())
                 .collect(Collectors.toList());
-
-
     }
 }

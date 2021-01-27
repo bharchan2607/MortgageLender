@@ -11,8 +11,13 @@ public class Loan {
     private LocalDate approvedDate;
 
     public Loan(Applicant applicant,int loanNumber) {
-        this.applicant=applicant;
+        this.applicant=new Applicant(applicant);
         this.loanNumber=loanNumber;
+    }
+
+    public Loan(Loan loan) {
+        this.applicant = new Applicant(loan.applicant);
+        this.loanNumber = loan.loanNumber;
     }
 
     public Applicant getApplicant() {

@@ -39,28 +39,28 @@ public class MortgageLenderTest {
         Applicant applicant = new Applicant(21, 700, 100000,250000);
         lender.setLoan(new Loan(applicant,4));
         lender.approveLoan(4);
-        assertEquals("qualified", applicant.getQualification());
+        assertEquals("qualified", lender.getLoan(4).getApplicant().getQualification());
         assertEquals(250000,lender.getLoan(4).getLoanAmount());
         assertEquals("qualified",lender.getLoan(4).getApprovedLoanStatus());
 
         Applicant applicant1 = new Applicant(37, 700, 100000,250000);
         lender.setLoan(new Loan(applicant1,1));
         lender.approveLoan(1);
-        assertEquals("not qualified", applicant1.getQualification());
+        assertEquals("not qualified", lender.getLoan(1).getApplicant().getQualification());
         assertEquals(0, lender.getLoan(1).getLoanAmount());
         assertEquals("denied", lender.getLoan(1).getApprovedLoanStatus());
 
         Applicant applicant2 = new Applicant(30, 600, 100000,250000);
         lender.setLoan(new Loan(applicant2,2));
         lender.approveLoan(2);
-        assertEquals("not qualified", applicant2.getQualification());
+        assertEquals("not qualified", lender.getLoan(2).getApplicant().getQualification());
         assertEquals(0, lender.getLoan(2).getLoanAmount());
         assertEquals("denied",lender.getLoan(2).getApprovedLoanStatus());
 
         Applicant applicant3 = new Applicant(30, 700, 50000,250000);
         lender.setLoan(new Loan(applicant3,3));
         lender.approveLoan(3);
-        assertEquals("partially qualified", applicant3.getQualification());
+        assertEquals("partially qualified", lender.getLoan(3).getApplicant().getQualification());
         assertEquals(200000, lender.getLoan(3).getLoanAmount());
         assertEquals("qualified", lender.getLoan(3).getApprovedLoanStatus());
 
@@ -71,7 +71,7 @@ public class MortgageLenderTest {
         Applicant applicant = new Applicant(21, 700, 100000,125000);
         lender.setLoan(new Loan(applicant,3));
         lender.sanctionLoan(3);
-        assertEquals("on hold", lender.getLoan(3).getApprovedLoanStatus());
+        assertEquals("on_hold", lender.getLoan(3).getApprovedLoanStatus());
 
         lender.deposit(25000);
         Applicant applicant2 = new Applicant(21, 700, 100000,125000);
@@ -141,11 +141,11 @@ public class MortgageLenderTest {
     }
     @Test
     public void filterLoansByStatus(){
-        //on hold
+        //on_hold
         Applicant applicant4 = new Applicant(21, 700, 100000,125000);
         lender.setLoan(new Loan(applicant4,4));
         lender.sanctionLoan(4);
-        assertEquals("on hold",lender.getLoan(4).getApprovedLoanStatus());
+        assertEquals("on_hold",lender.getLoan(4).getApprovedLoanStatus());
 
         //accepted
         lender.deposit(25000);
@@ -202,8 +202,8 @@ public class MortgageLenderTest {
         assertEquals("Loan[loanNumber=8, applicant=Applicant[dti=30, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='approved', loanAmount=125000.0, approvedDate=2021-01-27]", approvedLoan.get(1));
 
 
-        List<String> onHoldLoan = lender.filterLoansByStatus("on hold");
-        assertEquals("Loan[loanNumber=4, applicant=Applicant[dti=21, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='on hold', loanAmount=125000.0, approvedDate=null]", onHoldLoan.get(0));
+        List<String> onHoldLoan = lender.filterLoansByStatus("on_hold");
+        assertEquals("Loan[loanNumber=4, applicant=Applicant[dti=21, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='on_hold', loanAmount=125000.0, approvedDate=null]", onHoldLoan.get(0));
 
         List<String> acceptedLoan = lender.filterLoansByStatus("accepted");
         assertEquals("Loan[loanNumber=1, applicant=Applicant[dti=21, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='accepted', loanAmount=125000.0, approvedDate=2021-01-27]", acceptedLoan.get(0));

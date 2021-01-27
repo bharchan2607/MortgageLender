@@ -15,6 +15,13 @@ public class Applicant {
         this.requestedAmount = requestedAmount;
     }
 
+    public Applicant(Applicant applicant) {
+        this.dti = applicant.dti;
+        this.creditScore = applicant.creditScore;
+        this.savings = applicant.savings;
+        this.requestedAmount = applicant.requestedAmount;
+    }
+
     public String getQualification() {
         return qualification;
     }
@@ -49,4 +56,6 @@ public class Applicant {
                 ", qualification='" + qualification + '\'' +
                 ']';
     }
+
+
 }
