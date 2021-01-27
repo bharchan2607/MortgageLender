@@ -19,51 +19,20 @@ public class MortgageLenderTest {
     public void setup(){
         lender = new MortgageLender(100000);
     }
-    /**
-     * When I check my available funds
-     * Then I should see how much funds I currently have
-     */
+
     @Test
     public void checkAvailableFunds(){
         assertEquals(100000, lender.checkAvailableFunds());
     }
 
-    /**
-     * Given I have <current_amount> available funds
-     * When I add <deposit_amount>
-     * Then my available funds should be <total>
-     *
-     * Examples:
-     * | current_amount | deposit_amount |   total  |
-     * |     100,000    |      50,000    | 150,000  |
-     * |     200,000    |      30,000    | 230,000  |
-     */
+
     @Test
     public void depositAmountToFunds(){
         lender.deposit(50000);
         assertEquals(150000,lender.checkAvailableFunds());
     }
 
-    /**
-     * Rule: To qualify for the full amount, candidates must have debt-to-income (DTI) less than 36%, credit score above 620
-     * and savings worth 25% of requested loan amount.
-     *
-     * Rule: To partially qualify, candidates must still meet the same dti and credit score thresholds.
-     * The loan amount for partial qualified applications is four times the applicant's savings.
-     *
-     * Given a loan applicant with <dti>, <credit_score>, and <savings>
-     * When they apply for a loan with <requested_amount>
-     * Then their qualification is <qualification>
-     * And their loan amount is <loan_amount>
-     * And their loan status is <status>
-     *
-     * Example:
-     * |  requested_amount  |   dti  |  credit_score  |  savings  |     qualification    |  loan_amount  |   status   |
-     * |      250,000       |   21   |       700      | 100,000   |       qualified      |   250,000     |  qualified |
-     * |      250,000       |   37   |       700      | 100,000   |     not qualified    |         0     |  denied    |
-     * |      250,000       |   30   |       600      | 100,000   |     not qualified    |         0     |  denied    |
-     * |      250,000       |   30   |       700      |  50,000   |  partially qualified |   200,000     |  qualified |
-     */
+
     @Test
     public void loanApplicationQualification(){
         lender.deposit(200000);
@@ -96,20 +65,7 @@ public class MortgageLenderTest {
         assertEquals("qualified", lender.getLoan(3).getApprovedLoanStatus());
 
     }
-    /**
-     * Given I have <available_funds> in available funds
-     * When I process a qualified loan
-     * Then the loan status is set to <status>
-     *
-     * Example:
-     * | loan_amount | available_funds |    status  |
-     * |   125,000   |    100,000      |   on hold  |
-     * |   125,000   |    200,000      |  approved  |
-     * |   125,000   |    125,000      |  approved  |
-     *
-     * When I process a not qualified loan
-     * Then I should see a warning to not proceed
-     */
+
     @Test
     public void approveLoan(){
         Applicant applicant = new Applicant(21, 700, 100000,125000);
@@ -139,11 +95,7 @@ public class MortgageLenderTest {
         assertEquals("You can't proceed with the loan application", exception.getMessage());
     }
 
-    /**
-     * Given I have approved a loan
-     * Then the requested loan amount is moved from available funds to pending funds
-     * And I see the available and pending funds reflect the changes accordingly
-     */
+
     @Test
     public void moveLoanAmountToPendingFunds(){
         lender.deposit(200000);
@@ -153,17 +105,7 @@ public class MortgageLenderTest {
         assertEquals(125000, lender.getPendingFund());
         assertEquals(175000, lender.getCurrentAmount());
     }
-    /**
-     * Given I have an approved loan
-     * When the applicant accepts my loan offer
-     * Then the loan amount is removed from the pending funds
-     * And the loan status is marked as accepted
-     *
-     * Given I have an approved loan
-     * When the applicant rejects my loan offer
-     * Then the loan amount is moved from the pending funds back to available funds
-     * And the loan status is marked as rejected
-     */
+
     @Test
     public void loanAcceptanceStatus(){
         lender.deposit(200000);
