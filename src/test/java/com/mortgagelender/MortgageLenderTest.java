@@ -148,4 +148,38 @@ public class MortgageLenderTest {
         assertEquals(125000, lender.getPendingFund());
         assertEquals(175000, lender.getCurrentAmount());
     }
+    /**
+     * Given I have an approved loan
+     * When the applicant accepts my loan offer
+     * Then the loan amount is removed from the pending funds
+     * And the loan status is marked as accepted
+     *
+     * Given I have an approved loan
+     * When the applicant rejects my loan offer
+     * Then the loan amount is moved from the pending funds back to available funds
+     * And the loan status is marked as rejected
+     */
+    @Test
+    public void loanAcceptanceStatus(){
+        lender.deposit(200000);
+        Applicant applicant1 = new Applicant(21, 700, 100000,125000);
+        lender.setApplicant(applicant1);
+        lender.sanctionLoan();
+        String status =lender.loanAccepted(true);
+        assertEquals("accepted",status);
+        assertEquals(0,lender.getPendingFund());
+
+    }
+    @Test
+    public void loanRejectedStatus(){
+        lender.deposit(200000);
+        Applicant applicant1 = new Applicant(21, 700, 100000,125000);
+        lender.setApplicant(applicant1);
+        lender.sanctionLoan();
+        String status =lender.loanAccepted(false);
+        assertEquals("rejected",status);
+        assertEquals(0,lender.getPendingFund());
+        assertEquals(300000,lender.checkAvailableFunds());
+
+    }
 }

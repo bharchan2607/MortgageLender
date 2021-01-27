@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.mortgagelender.MortgageLenderTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-01-27T17:36:31" hostname="LAPTOP-S57OD5Q8" time="0.064">
+<testsuite name="com.mortgagelender.MortgageLenderTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-01-27T19:17:12" hostname="DESKTOP-JSBVD3G" time="0.053">
   <properties/>
-  <testcase name="moveLoanAmountToPendingFunds()" classname="com.mortgagelender.MortgageLenderTest" time="0.064"/>
+  <testcase name="loanRejectedStatus()" classname="com.mortgagelender.MortgageLenderTest" time="0.053"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

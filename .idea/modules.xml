@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/MortgageLender.iml" filepath="$PROJECT_DIR$/.idea/MortgageLender.iml" group="MortgageLender" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MortgageLender_main.iml" filepath="$PROJECT_DIR$/.idea/modules/MortgageLender_main.iml" group="MortgageLender" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MortgageLender_test.iml" filepath="$PROJECT_DIR$/.idea/modules/MortgageLender_test.iml" group="MortgageLender" />
+    </modules>
+  </component>
+</project>

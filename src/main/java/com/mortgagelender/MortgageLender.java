@@ -76,4 +76,17 @@ public class MortgageLender {
     public double getPendingFund() {
         return pendingFund;
     }
+
+    public String loanAccepted(boolean accepted) {
+        if(accepted){
+            pendingFund-=applicant.getLoanAmount();
+            return "accepted";
+        }
+        else{
+            currentAmount+=applicant.getLoanAmount();
+            pendingFund-=applicant.getLoanAmount();
+            return "rejected";
+        }
+
+    }
 }
