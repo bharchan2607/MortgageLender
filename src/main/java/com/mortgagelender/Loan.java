@@ -4,13 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Loan {
+    private int loanNumber;
     private Applicant applicant;
     private String approvedLoanStatus;
     private double loanAmount;
     private LocalDate approvedDate;
 
-    public Loan(Applicant applicant) {
+    public Loan(Applicant applicant,int loanNumber) {
         this.applicant=applicant;
+        this.loanNumber=loanNumber;
     }
 
     public Applicant getApplicant() {
@@ -39,5 +41,9 @@ public class Loan {
 
     public void setApprovedDate(LocalDate approvedDate) {
         this.approvedDate = approvedDate;
+    }
+
+    public int getLoanNumber() {
+        return loanNumber;
     }
 }

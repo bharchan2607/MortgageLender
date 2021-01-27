@@ -7,7 +7,6 @@ public class Applicant {
     private double requestedAmount;
     private String qualification;
 
-    private String status;
 
     public Applicant(int dti, int creditScore, double savings, double requestedAmount) {
         this.dti = dti;
@@ -19,11 +18,7 @@ public class Applicant {
     public String getQualification() {
         return qualification;
     }
-
-    public String getStatus() {
-        return status;
-    }
-
+    
     public int getDti() {
         return dti;
     }
@@ -42,12 +37,6 @@ public class Applicant {
 
     public void setQualification(String qualification) {
         this.qualification = qualification;
-    }
-
-
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
 
