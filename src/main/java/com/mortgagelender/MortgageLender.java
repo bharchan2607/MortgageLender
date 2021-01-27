@@ -2,13 +2,17 @@ package com.mortgagelender;
 
 import com.mortgagelender.exception.NotQualifiedApplicantException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+
 public class MortgageLender {
     private double currentAmount;
     private double pendingFund;
     private final int ALLOWED_DTI = 36;
     private final int ALLOWED_CREDIT_SCORE = 620;
     private final double ALLOWED_SAVINGS = 0.25;
-    private Applicant applicant;
+   private Loan loan;
 
     public MortgageLender(double amount) {
         this.currentAmount = amount;
@@ -23,46 +27,44 @@ public class MortgageLender {
     }
 
     public void checkApplicationQualification() {
-        if(applicant.getDti() < ALLOWED_DTI &&
-        applicant.getCreditScore() > ALLOWED_CREDIT_SCORE) {
-            if (applicant.getSavings() > ALLOWED_SAVINGS * applicant.getRequestedAmount()){
-                applicant.setQualification("qualified");
+        if(loan.getApplicant().getDti() < ALLOWED_DTI &&
+                loan.getApplicant().getCreditScore() > ALLOWED_CREDIT_SCORE) {
+            if (loan.getApplicant().getSavings() > ALLOWED_SAVINGS * loan.getApplicant().getRequestedAmount()){
+                loan.getApplicant().setQualification("qualified");
             }else{
-                applicant.setQualification("partially qualified");
+                loan.getApplicant().setQualification("partially qualified");
             }
         }else{
-            applicant.setQualification("not qualified");
+            loan.getApplicant().setQualification("not qualified");
         }
     }
 
     public void approveLoan() {
         checkApplicationQualification();
-        if(applicant.getQualification().equals("qualified")){
-            applicant.setLoanAmount(applicant.getRequestedAmount());
-            applicant.setStatus("qualified");
-        }else if(applicant.getQualification().equals("partially qualified")){
-            applicant.setLoanAmount(applicant.getSavings() * 4 );
-            applicant.setStatus("qualified");
+        if(loan.getApplicant().getQualification().equals("qualified")){
+            loan.setLoanAmount(loan.getApplicant().getRequestedAmount());
+            loan.getApplicant().setStatus("qualified");
+        }else if(loan.getApplicant().getQualification().equals("partially qualified")){
+            loan.setLoanAmount(loan.getApplicant().getSavings() * 4 );
+            loan.getApplicant().setStatus("qualified");
         }else{
-            applicant.setLoanAmount(0);
-            applicant.setStatus("denied");
+            loan.setLoanAmount(0);
+            loan.getApplicant().setStatus("denied");
         }
 
     }
 
-    public void setApplicant(Applicant applicant) {
-        this.applicant = applicant;
-    }
 
     public void sanctionLoan() {
         approveLoan();
-        if(applicant.getStatus().equals("qualified")) {
-            if (applicant.getLoanAmount() <= currentAmount) {
-                pendingFund += applicant.getLoanAmount();
-                currentAmount -= applicant.getLoanAmount();
-                applicant.setApprovedLoanStatus("approved");
+        if(loan.getApplicant().getStatus().equals("qualified")) {
+            if (loan.getLoanAmount() <= currentAmount) {
+                pendingFund += loan.getLoanAmount() ;
+                currentAmount -= loan.getLoanAmount() ;
+                loan.setApprovedLoanStatus("approved");
+                loan.setApprovedDate(LocalDate.now());
             } else {
-                applicant.setApprovedLoanStatus("on hold");
+                loan.setApprovedLoanStatus("on hold");
             }
         }else{
             throw new NotQualifiedApplicantException("You can't proceed with the loan application");
@@ -77,16 +79,34 @@ public class MortgageLender {
         return pendingFund;
     }
 
+    public void setLoan(Loan loan) {
+        this.loan = loan;
+    }
+
+    public Loan getLoan() {
+        return loan;
+    }
+
     public String loanAccepted(boolean accepted) {
         if(accepted){
-            pendingFund-=applicant.getLoanAmount();
+            pendingFund-=loan.getLoanAmount();
             return "accepted";
         }
         else{
-            currentAmount+=applicant.getLoanAmount();
-            pendingFund-=applicant.getLoanAmount();
+            currentAmount+=loan.getLoanAmount();
+            pendingFund-=loan.getLoanAmount();
             return "rejected";
         }
 
+    }
+
+    public void checkExpiredLoan() {
+        LocalDate now= LocalDate.now();
+        Period diff = Period.between(loan.getApprovedDate(), now);
+        if(diff.getDays()>3){
+            currentAmount+=loan.getLoanAmount();
+            pendingFund-=loan.getLoanAmount();
+            loan.setApprovedLoanStatus("expired");
+        }
     }
 }

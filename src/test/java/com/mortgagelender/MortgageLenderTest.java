@@ -4,6 +4,8 @@ import com.mortgagelender.exception.NotQualifiedApplicantException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -63,31 +65,31 @@ public class MortgageLenderTest {
     public void loanApplicationQualification(){
         lender.deposit(200000);
         Applicant applicant = new Applicant(21, 700, 100000,250000);
-        lender.setApplicant(applicant);
+        lender.setLoan(new Loan(applicant));
         lender.approveLoan();
         assertEquals("qualified", applicant.getQualification());
-        assertEquals(250000, applicant.getLoanAmount());
+        assertEquals(250000,lender.getLoan().getLoanAmount());
         assertEquals("qualified", applicant.getStatus());
 
         Applicant applicant1 = new Applicant(37, 700, 100000,250000);
-        lender.setApplicant(applicant1);
+        lender.setLoan(new Loan(applicant1));
         lender.approveLoan();
         assertEquals("not qualified", applicant1.getQualification());
-        assertEquals(0, applicant1.getLoanAmount());
+        assertEquals(0, lender.getLoan().getLoanAmount());
         assertEquals("denied", applicant1.getStatus());
 
         Applicant applicant2 = new Applicant(30, 600, 100000,250000);
-        lender.setApplicant(applicant2);
+        lender.setLoan(new Loan(applicant2));
         lender.approveLoan();
         assertEquals("not qualified", applicant2.getQualification());
-        assertEquals(0, applicant2.getLoanAmount());
+        assertEquals(0, lender.getLoan().getLoanAmount());
         assertEquals("denied", applicant2.getStatus());
 
         Applicant applicant3 = new Applicant(30, 700, 50000,250000);
-        lender.setApplicant(applicant3);
+        lender.setLoan(new Loan(applicant3));
         lender.approveLoan();
         assertEquals("partially qualified", applicant3.getQualification());
-        assertEquals(200000, applicant3.getLoanAmount());
+        assertEquals(200000, lender.getLoan().getLoanAmount());
         assertEquals("qualified", applicant3.getStatus());
 
     }
@@ -108,28 +110,28 @@ public class MortgageLenderTest {
     @Test
     public void approveLoan(){
         Applicant applicant = new Applicant(21, 700, 100000,125000);
-        lender.setApplicant(applicant);
+        lender.setLoan(new Loan(applicant));
         lender.sanctionLoan();
-        assertEquals("on hold", applicant.getApprovedLoanStatus());
+        assertEquals("on hold", lender.getLoan().getApprovedLoanStatus());
 
         lender.deposit(25000);
         Applicant applicant2 = new Applicant(21, 700, 100000,125000);
-        lender.setApplicant(applicant2);
+        lender.setLoan(new Loan(applicant2));
         lender.sanctionLoan();
-        assertEquals("approved", applicant2.getApprovedLoanStatus());
+        assertEquals("approved", lender.getLoan().getApprovedLoanStatus());
 
-        lender.deposit(100000);
+        lender.deposit(200000);
         Applicant applicant1 = new Applicant(21, 700, 100000,125000);
-        lender.setApplicant(applicant1);
+        lender.setLoan(new Loan(applicant1));
         lender.sanctionLoan();
-        assertEquals("approved", applicant1.getApprovedLoanStatus());
+        assertEquals("approved", lender.getLoan().getApprovedLoanStatus());
 
     }
 
     @Test
     public void displayWarningNotQualifiedLoan(){
         Applicant applicant = new Applicant(38, 700, 100000,125000);
-        lender.setApplicant(applicant);
+        lender.setLoan(new Loan(applicant));
         NotQualifiedApplicantException exception = assertThrows(NotQualifiedApplicantException.class, ()->lender.sanctionLoan());
         assertEquals("You can't proceed with the loan application", exception.getMessage());
     }
@@ -143,7 +145,7 @@ public class MortgageLenderTest {
     public void moveLoanAmountToPendingFunds(){
         lender.deposit(200000);
         Applicant applicant1 = new Applicant(21, 700, 100000,125000);
-        lender.setApplicant(applicant1);
+        lender.setLoan(new Loan(applicant1));
         lender.sanctionLoan();
         assertEquals(125000, lender.getPendingFund());
         assertEquals(175000, lender.getCurrentAmount());
@@ -163,7 +165,7 @@ public class MortgageLenderTest {
     public void loanAcceptanceStatus(){
         lender.deposit(200000);
         Applicant applicant1 = new Applicant(21, 700, 100000,125000);
-        lender.setApplicant(applicant1);
+        lender.setLoan(new Loan(applicant1));
         lender.sanctionLoan();
         String status =lender.loanAccepted(true);
         assertEquals("accepted",status);
@@ -174,12 +176,22 @@ public class MortgageLenderTest {
     public void loanRejectedStatus(){
         lender.deposit(200000);
         Applicant applicant1 = new Applicant(21, 700, 100000,125000);
-        lender.setApplicant(applicant1);
+        lender.setLoan(new Loan(applicant1));
         lender.sanctionLoan();
         String status =lender.loanAccepted(false);
         assertEquals("rejected",status);
         assertEquals(0,lender.getPendingFund());
         assertEquals(300000,lender.checkAvailableFunds());
 
+    }
+    @Test
+    public void checkUndecidedLoans(){
+        lender.deposit(200000);
+        Applicant applicant1 = new Applicant(21, 700, 100000,125000);
+        lender.setLoan(new Loan(applicant1));
+        lender.sanctionLoan();
+        lender.getLoan().setApprovedDate( LocalDate.of(2021, 01, 23));
+        lender.checkExpiredLoan();
+       assertEquals("expired",lender.getLoan().getApprovedLoanStatus());
     }
 }

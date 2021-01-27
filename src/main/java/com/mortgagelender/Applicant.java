@@ -6,9 +6,9 @@ public class Applicant {
     private double savings;
     private double requestedAmount;
     private String qualification;
-    private double loanAmount;
+
     private String status;
-    private String approvedLoanStatus;
+
     public Applicant(int dti, int creditScore, double savings, double requestedAmount) {
         this.dti = dti;
         this.creditScore = creditScore;
@@ -18,10 +18,6 @@ public class Applicant {
 
     public String getQualification() {
         return qualification;
-    }
-
-    public double getLoanAmount() {
-        return loanAmount;
     }
 
     public String getStatus() {
@@ -48,19 +44,11 @@ public class Applicant {
         this.qualification = qualification;
     }
 
-    public void setLoanAmount(double loanAmount) {
-        this.loanAmount = loanAmount;
-    }
+
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public String getApprovedLoanStatus() {
-        return this.approvedLoanStatus;
-    }
 
-    public void setApprovedLoanStatus(String approvedStatus) {
-        this.approvedLoanStatus = approvedStatus;
-    }
 }
