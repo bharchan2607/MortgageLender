@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MortgageLender {
     private double currentAmount;
@@ -112,11 +113,13 @@ public class MortgageLender {
     public void checkExpiredLoan() {
         for(Loan loan: loans){
             LocalDate now= LocalDate.now();
-            Period diff = Period.between(loan.getApprovedDate(), now);
-            if(diff.getDays()>3){
-                currentAmount+=loan.getLoanAmount();
-                pendingFund-=loan.getLoanAmount();
-                loan.setApprovedLoanStatus("expired");
+            if(loan.getApprovedLoanStatus().equals("approved")) {
+                Period diff = Period.between(loan.getApprovedDate(), now);
+                if (diff.getDays() > 3) {
+                    currentAmount += loan.getLoanAmount();
+                    pendingFund -= loan.getLoanAmount();
+                    loan.setApprovedLoanStatus("expired");
+                }
             }
         }
 
@@ -132,4 +135,12 @@ public class MortgageLender {
         return null;
     }
 
+    public List<String> filterLoansByStatus(String status) {
+        return loans.stream()
+                .filter(loan -> loan.getApprovedLoanStatus().equals(status))
+                .map(loan -> loan.toString())
+                .collect(Collectors.toList());
+
+
+    }
 }

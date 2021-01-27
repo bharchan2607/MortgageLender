@@ -39,5 +39,14 @@ public class Applicant {
         this.qualification = qualification;
     }
 
-
+    @Override
+    public String toString() {
+        return "Applicant[" +
+                "dti=" + dti +
+                ", creditScore=" + creditScore +
+                ", savings=" + savings +
+                ", requestedAmount=" + requestedAmount +
+                ", qualification='" + qualification + '\'' +
+                ']';
+    }
 }

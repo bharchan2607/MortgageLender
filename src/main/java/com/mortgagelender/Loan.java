@@ -46,4 +46,15 @@ public class Loan {
     public int getLoanNumber() {
         return loanNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Loan[" +
+                "loanNumber=" + loanNumber +
+                ", applicant=" + applicant +
+                ", approvedLoanStatus='" + approvedLoanStatus + '\'' +
+                ", loanAmount=" + loanAmount +
+                ", approvedDate=" + approvedDate +
+                ']';
+    }
 }

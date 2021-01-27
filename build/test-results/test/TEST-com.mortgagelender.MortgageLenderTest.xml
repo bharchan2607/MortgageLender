@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.mortgagelender.MortgageLenderTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2021-01-27T21:37:22" hostname="DESKTOP-JSBVD3G" time="0.177">
+<testsuite name="com.mortgagelender.MortgageLenderTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2021-01-27T22:16:39" hostname="LAPTOP-S57OD5Q8" time="0.231">
   <properties/>
-  <testcase name="checkUndecidedLoans()" classname="com.mortgagelender.MortgageLenderTest" time="0.128"/>
-  <testcase name="loanApplicationQualification()" classname="com.mortgagelender.MortgageLenderTest" time="0.004"/>
-  <testcase name="depositAmountToFunds()" classname="com.mortgagelender.MortgageLenderTest" time="0.003"/>
-  <testcase name="displayWarningNotQualifiedLoan()" classname="com.mortgagelender.MortgageLenderTest" time="0.009"/>
-  <testcase name="approveLoan()" classname="com.mortgagelender.MortgageLenderTest" time="0.001"/>
-  <testcase name="loanAcceptanceStatus()" classname="com.mortgagelender.MortgageLenderTest" time="0.003"/>
-  <testcase name="loanRejectedStatus()" classname="com.mortgagelender.MortgageLenderTest" time="0.002"/>
-  <testcase name="checkAvailableFunds()" classname="com.mortgagelender.MortgageLenderTest" time="0.001"/>
-  <testcase name="filterLoansByStatus()" classname="com.mortgagelender.MortgageLenderTest" time="0.001"/>
-  <testcase name="moveLoanAmountToPendingFunds()" classname="com.mortgagelender.MortgageLenderTest" time="0.004"/>
+  <testcase name="checkUndecidedLoans()" classname="com.mortgagelender.MortgageLenderTest" time="0.086"/>
+  <testcase name="loanApplicationQualification()" classname="com.mortgagelender.MortgageLenderTest" time="0.002"/>
+  <testcase name="depositAmountToFunds()" classname="com.mortgagelender.MortgageLenderTest" time="0.001"/>
+  <testcase name="displayWarningNotQualifiedLoan()" classname="com.mortgagelender.MortgageLenderTest" time="0.004"/>
+  <testcase name="approveLoan()" classname="com.mortgagelender.MortgageLenderTest" time="0.002"/>
+  <testcase name="loanAcceptanceStatus()" classname="com.mortgagelender.MortgageLenderTest" time="0.01"/>
+  <testcase name="loanRejectedStatus()" classname="com.mortgagelender.MortgageLenderTest" time="0.003"/>
+  <testcase name="checkAvailableFunds()" classname="com.mortgagelender.MortgageLenderTest" time="0.0"/>
+  <testcase name="filterLoansByStatus()" classname="com.mortgagelender.MortgageLenderTest" time="0.103"/>
+  <testcase name="moveLoanAmountToPendingFunds()" classname="com.mortgagelender.MortgageLenderTest" time="0.003"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

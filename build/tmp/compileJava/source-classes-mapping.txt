@@ -1,8 +1,8 @@
 com/mortgagelender/exception/NotQualifiedApplicantException.java
  com.mortgagelender.exception.NotQualifiedApplicantException
-com/mortgagelender/Applicant.java
- com.mortgagelender.Applicant
 com/mortgagelender/Loan.java
  com.mortgagelender.Loan
+com/mortgagelender/Applicant.java
+ com.mortgagelender.Applicant
 com/mortgagelender/MortgageLender.java
  com.mortgagelender.MortgageLender

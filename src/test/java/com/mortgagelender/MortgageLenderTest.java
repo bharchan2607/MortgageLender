@@ -199,48 +199,84 @@ public class MortgageLenderTest {
     }
     @Test
     public void filterLoansByStatus(){
-        //approved
+        //on hold
+        Applicant applicant4 = new Applicant(21, 700, 100000,125000);
+        lender.setLoan(new Loan(applicant4,4));
+        lender.sanctionLoan(4);
+        assertEquals("on hold",lender.getLoan(4).getApprovedLoanStatus());
+
+        //accepted
         lender.deposit(25000);
         Applicant applicant1 = new Applicant(21, 700, 100000,125000);
         lender.setLoan(new Loan(applicant1,1));
         lender.sanctionLoan(1);
         lender.loanAccepted(true,1);
+        assertEquals("accepted",lender.getLoan(1).getApprovedLoanStatus());
+
         //rejected
         lender.deposit(200000);
         Applicant applicant2 = new Applicant(21, 700, 100000,125000);
         lender.setLoan(new Loan(applicant2,2));
         lender.sanctionLoan(2);
         lender.loanAccepted(false,2);
+        assertEquals("rejected",lender.getLoan(2).getApprovedLoanStatus());
 
         //expired
-
         lender.deposit(200000);
         Applicant applicant3 = new Applicant(21, 700, 100000,125000);
         lender.setLoan(new Loan(applicant3,3));
         lender.sanctionLoan(3);
         lender.getLoan(3).setApprovedDate( LocalDate.of(2021, 01, 23));
         lender.checkExpiredLoan();
+        assertEquals("expired",lender.getLoan(3).getApprovedLoanStatus());
 
-        //on hold
-        Applicant applicant4 = new Applicant(21, 700, 100000,125000);
-        lender.setLoan(new Loan(applicant4,4));
-        lender.sanctionLoan(4);
          //denied
         Applicant applicant5 = new Applicant(30, 600, 100000,250000);
         lender.setLoan(new Loan(applicant5,5));
         lender.approveLoan(5);
+        assertEquals("denied",lender.getLoan(5).getApprovedLoanStatus());
 
         //Qualified
-
         Applicant applicant6 = new Applicant(30, 700, 50000,250000);
         lender.setLoan(new Loan(applicant6,6));
         lender.approveLoan(6);
+        assertEquals("qualified",lender.getLoan(6).getApprovedLoanStatus());
 
-        //aAccepted
+        //Approved
         lender.deposit(200000);
         Applicant applicant7 = new Applicant(21, 700, 100000,125000);
         lender.setLoan(new Loan(applicant7,7));
         lender.sanctionLoan(7);
+        assertEquals("approved",lender.getLoan(7).getApprovedLoanStatus());
+
+        lender.deposit(200000);
+        Applicant applicant8 = new Applicant(30, 700, 100000,125000);
+        lender.setLoan(new Loan(applicant8,8));
+        lender.sanctionLoan(8);
+        assertEquals("approved",lender.getLoan(8).getApprovedLoanStatus());
+
+        List<String> approvedLoan = lender.filterLoansByStatus("approved");
+        assertEquals("Loan[loanNumber=7, applicant=Applicant[dti=21, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='approved', loanAmount=125000.0, approvedDate=2021-01-27]", approvedLoan.get(0));
+        assertEquals("Loan[loanNumber=8, applicant=Applicant[dti=30, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='approved', loanAmount=125000.0, approvedDate=2021-01-27]", approvedLoan.get(1));
+
+
+        List<String> onHoldLoan = lender.filterLoansByStatus("on hold");
+        assertEquals("Loan[loanNumber=4, applicant=Applicant[dti=21, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='on hold', loanAmount=125000.0, approvedDate=null]", onHoldLoan.get(0));
+
+        List<String> acceptedLoan = lender.filterLoansByStatus("accepted");
+        assertEquals("Loan[loanNumber=1, applicant=Applicant[dti=21, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='accepted', loanAmount=125000.0, approvedDate=2021-01-27]", acceptedLoan.get(0));
+
+        List<String> rejectedLoan = lender.filterLoansByStatus("rejected");
+        assertEquals("Loan[loanNumber=2, applicant=Applicant[dti=21, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='rejected', loanAmount=125000.0, approvedDate=2021-01-27]", rejectedLoan.get(0));
+
+        List<String> expiredLoan = lender.filterLoansByStatus("expired");
+        assertEquals("Loan[loanNumber=3, applicant=Applicant[dti=21, creditScore=700, savings=100000.0, requestedAmount=125000.0, qualification='qualified'], approvedLoanStatus='expired', loanAmount=125000.0, approvedDate=2021-01-23]", expiredLoan.get(0));
+
+        List<String> deniedLoan = lender.filterLoansByStatus("denied");
+        assertEquals("Loan[loanNumber=5, applicant=Applicant[dti=30, creditScore=600, savings=100000.0, requestedAmount=250000.0, qualification='not qualified'], approvedLoanStatus='denied', loanAmount=0.0, approvedDate=null]", deniedLoan.get(0));
+
+        List<String> qualifiedLoan = lender.filterLoansByStatus("qualified");
+        assertEquals("Loan[loanNumber=6, applicant=Applicant[dti=30, creditScore=700, savings=50000.0, requestedAmount=250000.0, qualification='partially qualified'], approvedLoanStatus='qualified', loanAmount=200000.0, approvedDate=null]", qualifiedLoan.get(0));
 
     }
 }
